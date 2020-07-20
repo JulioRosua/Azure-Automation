@@ -107,7 +107,11 @@ Function getExpiringCerts ()
 
 try
 {
-	$expiringCerts = @()
+    $expiringCerts = @()
+    
+    $Conn = Get-AutomationConnection -Name AzureRunAsConnection
+    Connect-AzureRmAccount -ServicePrincipal -Tenant $Conn.TenantID `
+    -ApplicationId $Conn.ApplicationID -CertificateThumbprint $Conn.CertificateThumbprint
 	
 	select-azurermsubscription -subscriptionID $subscriptionID
     $expiringCerts = getExpiringCerts
